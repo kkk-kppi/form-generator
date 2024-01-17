@@ -7,7 +7,8 @@ Element UI表单设计及代码生成器，可将生成的代码直接运行在�
 
 ## TODO任务
 - [ ] 表格组件（表单设计器、表单解析器、表单预览器）
-    - [ ] 表格组件：列可通过组件属性配置
+    - [x] 在左侧栏目增加表格组件选项，位于components/generator/config.js的layoutComponents中
+    - [ ] 增加列配置，可通过组件属性配置表格列
     - [ ] 表格组件：列可配置为表单组件，初步支持el-input、el-select
 - [ ] 其他待定
 
