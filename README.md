@@ -1,10 +1,15 @@
-![image](https://ae01.alicdn.com/kf/U51bfb661aba945b48a4c71774421d414C.gif)
 ## 简介
 Element UI表单设计及代码生成器，可将生成的代码直接运行在基于Element的vue项目中；也可导出JSON表单，使用配套的解析器将JSON解析成真实的表单。 
 - 【[国内预览地址](https://mrhj.gitee.io/form-generator)】 【[国际预览地址](https://jakhuang.github.io/form-generator)】
 - 【[github仓库](https://github.com/JakHuang/form-generator)】 【 [码云仓库](https://gitee.com/mrhj/form-generator)】
 - [配套vscode插件](https://github.com/JakHuang/form-generator-plugin)
 - [配套JSON解析器](https://github.com/JakHuang/form-generator/blob/dev/src/components/parser/example/Index.vue)
+
+## TODO任务
+- [ ] 表格组件（表单设计器、表单解析器、表单预览器）
+    - [ ] 表格组件：列可通过组件属性配置
+    - [ ] 表格组件：列可配置为表单组件，初步支持el-input、el-select
+- [ ] 其他待定
 
 ## 文档
 - [el-dialog的封装与调用](https://github.com/JakHuang/form-generator/wiki/el-dialog%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E8%B0%83%E7%94%A8)
