@@ -780,7 +780,7 @@ import TreeNodeDialog from '@/views/index/TreeNodeDialog'
 import { isNumberStr } from '@/utils/index'
 import IconsDialog from './IconsDialog'
 import {
-  inputComponents, selectComponents, layoutComponents
+  inputComponents, selectComponents, layoutComponents, cloneInput
 } from '@/components/generator/config'
 import { saveFormConf } from '@/utils/db'
 
@@ -970,9 +970,9 @@ export default {
     },
     addTableColumn() {
       this.activeData.__slot__.columns.push({
+        ...cloneInput,
         label: '默认',
-        prop: 'test1',
-        __config__: {}
+        prop: 'test1'
       })
     },
     addTreeItem() {

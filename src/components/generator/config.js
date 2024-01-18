@@ -1,3 +1,5 @@
+import { deepClone } from '@/utils/index'
+
 // 表单属性【右面板】
 export const formConf = {
   formRef: 'elForm',
@@ -148,6 +150,7 @@ export const inputComponents = [
     branding: false // 隐藏右下角品牌烙印
   }
 ]
+export const cloneInput = deepClone(inputComponents[0])
 
 // 选择型组件 【左面板】
 export const selectComponents = [
@@ -654,19 +657,19 @@ export const layoutComponents = [
     __slot__: {
       columns: [
         {
+          ...cloneInput,
           prop: 'default1',
-          label: '默认1',
-          __config__: {}
+          label: '默认1'
         },
         {
+          ...cloneInput,
           prop: 'default2',
-          label: '默认2',
-          __config__: {}
+          label: '默认2'
         },
         {
+          ...cloneInput,
           prop: 'default3',
-          label: '默认3',
-          __config__: {}
+          label: '默认3'
         }
       ]
     },

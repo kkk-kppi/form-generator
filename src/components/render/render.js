@@ -22,19 +22,24 @@ function vModel(dataObject, defaultValue) {
   }
 }
 
-function mountSlotFiles(h, confClone, children) {
+export function mountSlotFiles(h, confClone, children) {
   const childObjs = componentChild[confClone.__config__.tag]
   if (childObjs) {
     Object.keys(childObjs).forEach(key => {
       const childFunc = childObjs[key]
       if (confClone.__slot__ && confClone.__slot__[key]) {
-        children.push(childFunc(h, confClone, key))
+        // 2024/01/18 - 暂时增加一个判断，给el-table做特殊处理，走下来流程
+        if (confClone.__config__.tag === 'el-table') {
+          children.push(childFunc.call(this, h, confClone, key))
+        } else {
+          children.push(childFunc(h, confClone, key))
+        }
       }
     })
   }
 }
 
-function emitEvents(confClone) {
+export function emitEvents(confClone) {
   ['on', 'nativeOn'].forEach(attr => {
     const eventKeyList = Object.keys(confClone[attr] || {})
     eventKeyList.forEach(key => {
@@ -46,7 +51,7 @@ function emitEvents(confClone) {
   })
 }
 
-function buildDataObject(confClone, dataObject) {
+export function buildDataObject(confClone, dataObject) {
   Object.keys(confClone).forEach(key => {
     const val = confClone[key]
     if (key === '__vModel__') {
@@ -76,7 +81,7 @@ function clearAttrs(dataObject) {
   delete dataObject.attrs.__methods__
 }
 
-function makeDataObject() {
+export function makeDataObject() {
   // 深入数据对象：
   // https://cn.vuejs.org/v2/guide/render-function.html#%E6%B7%B1%E5%85%A5%E6%95%B0%E6%8D%AE%E5%AF%B9%E8%B1%A1
   return {
@@ -104,6 +109,7 @@ export default {
     }
   },
   render(h) {
+    console.log('render.js [render] Method')
     const dataObject = makeDataObject()
     const confClone = deepClone(this.conf)
     const children = this.$slots.default || []
@@ -116,7 +122,7 @@ export default {
 
     // 将json表单配置转化为vue render可以识别的 “数据对象（dataObject）”
     buildDataObject.call(this, confClone, dataObject)
-
+    console.log('render.js [render] Method, target => dataObject：', dataObject)
     return h(this.conf.__config__.tag, dataObject, children)
   }
 }
