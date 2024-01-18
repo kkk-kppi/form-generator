@@ -974,11 +974,30 @@ export default {
       //   label: '默认',
       //   prop: 'test1'
       // })
+      const generatorConfig = tableColumnItem()
+      // 需要调用createIdAndKey方法，才能正常输入，createIdAndKey方法先从Home中copy一份过来
+      this.createIdAndKey(generatorConfig)
       this.activeData.__config__.children.push({
-        ...tableColumnItem(),
+        ...generatorConfig,
         prop: `index${this.activeData.__config__.children.length - 1}`,
         label: `列表项${this.activeData.__config__.children.length - 1}`
       })
+    },
+    createIdAndKey(item) {
+      const config = item.__config__
+      config.formId = ++this.idGlobal
+      config.renderKey = `${config.formId}${+new Date()}` // 改变renderKey后可以实现强制更新组件
+      if (config.layout === 'colFormItem') {
+        item.__vModel__ = `field${this.idGlobal}`
+      } else if (config.layout === 'rowFormItem') {
+        config.componentName = `row${this.idGlobal}`
+        !Array.isArray(config.children) && (config.children = [])
+        delete config.label // rowFormItem无需配置label属性
+      }
+      if (Array.isArray(config.children)) {
+        config.children = config.children.map(childItem => this.createIdAndKey(childItem))
+      }
+      return item
     },
     addTreeItem() {
       ++this.idGlobal
