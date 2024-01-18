@@ -409,18 +409,18 @@
           <template v-if="['el-table'].indexOf(activeData.__config__.tag) > -1">
             <el-divider>表格列设置</el-divider>
             <draggable
-              :list="activeData.__slot__.columns"
+              :list="activeData.__config__.children"
               :animation="340"
               group="selectItem"
               handle=".option-drag"
             >
-              <div v-for="(column, index) in activeData.__slot__.columns" :key="index" class="select-item">
+              <div v-for="(column, index) in activeData.__config__.children" :key="index" class="select-item">
                 <div class="select-line-icon option-drag">
                   <i class="el-icon-s-operation" />
                 </div>
                 <el-input v-model="column.label" placeholder="列头" size="small" />
                 <el-input v-model="column.prop" placeholder="列key" size="small" />
-                <div class="close-btn select-line-icon" @click="activeData.__slot__.columns.splice(index, 1)">
+                <div class="close-btn select-line-icon" @click="activeData.__config__.children.splice(index, 1)">
                   <i class="el-icon-remove-outline" />
                 </div>
               </div>
@@ -780,7 +780,7 @@ import TreeNodeDialog from '@/views/index/TreeNodeDialog'
 import { isNumberStr } from '@/utils/index'
 import IconsDialog from './IconsDialog'
 import {
-  inputComponents, selectComponents, layoutComponents, cloneInput
+  inputComponents, selectComponents, layoutComponents, /* cloneInput, */ tableColumnItem
 } from '@/components/generator/config'
 import { saveFormConf } from '@/utils/db'
 
@@ -969,10 +969,15 @@ export default {
       })
     },
     addTableColumn() {
-      this.activeData.__slot__.columns.push({
-        ...cloneInput,
-        label: '默认',
-        prop: 'test1'
+      // this.activeData.__slot__.columns.push({
+      //   ...cloneInput,
+      //   label: '默认',
+      //   prop: 'test1'
+      // })
+      this.activeData.__config__.children.push({
+        ...tableColumnItem(),
+        prop: `index${this.activeData.__config__.children.length - 1}`,
+        label: `列表项${this.activeData.__config__.children.length - 1}`
       })
     },
     addTreeItem() {
