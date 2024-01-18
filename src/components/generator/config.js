@@ -564,57 +564,111 @@ export const layoutComponents = [
       method: 'get',
       dataPath: 'list',
       dataConsumer: 'data',
-      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
-      children: [{
-        __config__: {
-          layout: 'raw',
-          tag: 'el-table-column',
-          renderKey: 15957617660153
+      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData'
+      // children: [{
+      //   __config__: {
+      //     layout: 'raw',
+      //     tag: 'el-table-column',
+      //     renderKey: 15957617660153,
+      //     children: [
+      //       {
+      //         // 组件的自定义配置
+      //         __config__: {
+      //           label: '',
+      //           labelWidth: null,
+      //           showLabel: true,
+      //           changeTag: true,
+      //           tag: 'el-input',
+      //           tagIcon: 'input',
+      //           defaultValue: undefined,
+      //           required: true,
+      //           layout: 'colFormItem',
+      //           span: 24,
+      //           document: 'https://element.eleme.cn/#/zh-CN/component/input',
+      //           // 正则校验规则
+      //           regList: []
+      //         },
+      //         // 组件的插槽属性
+      //         __slot__: {
+      //           prepend: '',
+      //           append: ''
+      //         },
+      //         // 其余的为可直接写在组件标签上的属性
+      //         placeholder: '请输入',
+      //         style: { width: '100%' },
+      //         clearable: true,
+      //         'prefix-icon': '',
+      //         'suffix-icon': '',
+      //         maxlength: null,
+      //         'show-word-limit': false,
+      //         readonly: false,
+      //         disabled: false
+      //       }
+      //     ]
+      //   },
+      //   prop: 'date',
+      //   label: '日期'
+      // }, {
+      //   __config__: {
+      //     layout: 'raw',
+      //     tag: 'el-table-column',
+      //     renderKey: 15957617660152
+      //   },
+      //   prop: 'address',
+      //   label: '地址'
+      // }, {
+      //   __config__: {
+      //     layout: 'raw',
+      //     tag: 'el-table-column',
+      //     renderKey: 15957617660151
+      //   },
+      //   prop: 'name',
+      //   label: '名称'
+      // }, {
+      //   __config__: {
+      //     layout: 'raw',
+      //     tag: 'el-table-column',
+      //     renderKey: 1595774496335,
+      //     children: [
+      //       {
+      //         __config__: {
+      //           label: '按钮',
+      //           tag: 'el-button',
+      //           tagIcon: 'button',
+      //           layout: 'raw',
+      //           renderKey: 1595779809901
+      //         },
+      //         __slot__: {
+      //           default: '主要按钮'
+      //         },
+      //         type: 'primary',
+      //         icon: 'el-icon-search',
+      //         round: false,
+      //         size: 'medium'
+      //       }
+      //     ]
+      //   },
+      //   label: '操作'
+      // }]
+    },
+    __slot__: {
+      columns: [
+        {
+          prop: 'default1',
+          label: '默认1',
+          __config__: {}
         },
-        prop: 'date',
-        label: '日期'
-      }, {
-        __config__: {
-          layout: 'raw',
-          tag: 'el-table-column',
-          renderKey: 15957617660152
+        {
+          prop: 'default2',
+          label: '默认2',
+          __config__: {}
         },
-        prop: 'address',
-        label: '地址'
-      }, {
-        __config__: {
-          layout: 'raw',
-          tag: 'el-table-column',
-          renderKey: 15957617660151
-        },
-        prop: 'name',
-        label: '名称'
-      }, {
-        __config__: {
-          layout: 'raw',
-          tag: 'el-table-column',
-          renderKey: 1595774496335,
-          children: [
-            {
-              __config__: {
-                label: '按钮',
-                tag: 'el-button',
-                tagIcon: 'button',
-                layout: 'raw',
-                renderKey: 1595779809901
-              },
-              __slot__: {
-                default: '主要按钮'
-              },
-              type: 'primary',
-              icon: 'el-icon-search',
-              round: false,
-              size: 'medium'
-            }
-          ]
-        },
-        label: '操作'
-      }]
+        {
+          prop: 'default3',
+          label: '默认3',
+          __config__: {}
+        }
+      ]
     },
     data: [],
     directives: [{

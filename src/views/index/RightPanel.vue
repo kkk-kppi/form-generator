@@ -405,6 +405,38 @@
             </div>
             <el-divider />
           </template>
+          <!-- 控制并配置el-table的列设置，目前支持：el-table -->
+          <template v-if="['el-table'].indexOf(activeData.__config__.tag) > -1">
+            <el-divider>表格列设置</el-divider>
+            <draggable
+              :list="activeData.__slot__.columns"
+              :animation="340"
+              group="selectItem"
+              handle=".option-drag"
+            >
+              <div v-for="(column, index) in activeData.__slot__.columns" :key="index" class="select-item">
+                <div class="select-line-icon option-drag">
+                  <i class="el-icon-s-operation" />
+                </div>
+                <el-input v-model="column.label" placeholder="列头" size="small" />
+                <el-input v-model="column.prop" placeholder="列key" size="small" />
+                <div class="close-btn select-line-icon" @click="activeData.__slot__.columns.splice(index, 1)">
+                  <i class="el-icon-remove-outline" />
+                </div>
+              </div>
+            </draggable>
+            <div style="margin-left: 20px;">
+              <el-button
+                style="padding-bottom: 0"
+                icon="el-icon-circle-plus-outline"
+                type="text"
+                @click="addTableColumn"
+              >
+                添加列
+              </el-button>
+            </div>
+            <el-divider />
+          </template>
           <!-- 控制表单项的数据来源，静态or动态，目前只支持：el-cascader, el-table -->
           <template v-if="['el-cascader', 'el-table'].includes(activeData.__config__.tag)">
             <el-divider>选项</el-divider>
@@ -934,6 +966,13 @@ export default {
       this.activeData.__slot__.options.push({
         label: '',
         value: ''
+      })
+    },
+    addTableColumn() {
+      this.activeData.__slot__.columns.push({
+        label: '默认',
+        prop: 'test1',
+        __config__: {}
       })
     },
     addTreeItem() {
