@@ -121,7 +121,7 @@
           <!-- 控制并设置el-checkbox-group的最少选中个数 -->
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="至少应选">
             <el-input-number
-              class="el-checkbox-group__min"
+              class="set-width-100-percentage"
               :value="activeData.min"
               :min="0"
               placeholder="至少应选"
@@ -131,7 +131,7 @@
           <!-- 控制并设置el-checkbox-group的最大选中个数 -->
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="最多可选">
             <el-input-number
-              class="el-checkbox-group__max"
+              class="set-width-100-percentage"
               :value="activeData.max"
               :min="0"
               placeholder="最多可选"
@@ -181,39 +181,50 @@
           <el-form-item v-if="activeData.autosize !== undefined" label="最小行数">
             <el-input-number
               v-model="activeData.autosize.minRows"
-              class="el-input-textarea__row-min"
+              class="set-width-100-percentage"
               :min="1"
               placeholder="最小行数"
+              @change="changeRenderKey"
             />
           </el-form-item>
           <!-- 控制并设置组件的最大行数，当前仅包含：多行文本 -->
           <el-form-item v-if="activeData.autosize !== undefined" label="最大行数">
             <el-input-number
               v-model="activeData.autosize.maxRows"
-              class="el-input-textarea__row-max"
+              class="set-width-100-percentage"
               :min="1"
               placeholder="最大行数"
             />
           </el-form-item>
           <!-- 控制并设置组件的最小值，当前仅包含：el-input-number、el-slider -->
           <el-form-item v-if="isShowMin" label="最小值">
-            <el-input-number v-model="activeData.min" placeholder="最小值" />
+            <el-input-number v-model="activeData.min" class="set-width-100-percentage" placeholder="最小值" />
           </el-form-item>
           <!-- 控制并设置组件的最大值，当前仅包含：el-input-number、el-slider -->
           <el-form-item v-if="isShowMax" label="最大值">
-            <el-input-number v-model="activeData.max" placeholder="最大值" />
+            <el-input-number v-model="activeData.max" class="set-width-100-percentage" placeholder="最大值" />
           </el-form-item>
           <!-- 控制并设置组件的高度，目前包含组件：编辑器（富文本） -->
           <el-form-item v-if="activeData.height!==undefined" label="组件高度">
-            <el-input-number v-model="activeData.height" placeholder="高度" @input="changeRenderKey" />
+            <el-input-number
+              v-model="activeData.height"
+              class="set-width-100-percentage"
+              placeholder="高度"
+              @input="changeRenderKey"
+            />
           </el-form-item>
           <!-- 控制并设置组件的步长，目前包含组件：计数器、滑块 -->
           <el-form-item v-if="isShowStep" label="步长">
-            <el-input-number v-model="activeData.step" placeholder="步数" />
+            <el-input-number v-model="activeData.step" class="set-width-100-percentage" placeholder="步数" />
           </el-form-item>
           <!-- 控制并设置el-input-number组件的精度，包含：数字、小数 -->
           <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="精度">
-            <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" />
+            <el-input-number
+              v-model="activeData.precision"
+              class="set-width-100-percentage"
+              :min="0"
+              placeholder="精度"
+            />
           </el-form-item>
           <!-- 控制并设置el-input-number组件的按钮位置 -->
           <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="按钮位置">
@@ -808,7 +819,7 @@ const dateTimeFormat = {
 }
 
 // 使changeRenderKey在目标组件改变时可用
-const needRerenderList = ['tinymce']
+const needRerenderList = ['rich-text', 'textarea']
 
 export default {
   components: {
@@ -1138,7 +1149,7 @@ export default {
       this.$emit('tag-change', target)
     },
     changeRenderKey() {
-      if (needRerenderList.includes(this.activeData.__config__.tag)) {
+      if (needRerenderList.includes(this.activeData.__config__.tagIcon)) {
         this.activeData.__config__.renderKey = +new Date()
       }
     }
@@ -1220,11 +1231,7 @@ export default {
 .node-icon{
   color: #bebfc3;
 }
-
-.el-checkbox-group__min, .el-checkbox-group__max {
-  width: 100%;
-}
-.el-input-textarea__row-min, .el-input-textarea__row-max{
+.set-width-100-percentage{
   width: 100%;
 }
 </style>
