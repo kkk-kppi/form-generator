@@ -37,6 +37,6 @@ function renderVNode(h, conf) {
   emitEvents.call(this, confClone)
 
   buildDataObject.call(this, dataObject, dataObject)
-  console.log('el-table children dataObject：', dataObject)
+
   return h(conf.tag, dataObject)
 }

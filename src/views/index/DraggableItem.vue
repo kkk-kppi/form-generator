@@ -21,7 +21,6 @@ const components = {
 }
 const layouts = {
   colFormItem(h, currentItem, index, list) {
-    console.log('Draggable-Item [colFormItem] Render Method')
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
     const child = renderChildren.apply(this, arguments)
@@ -45,7 +44,6 @@ const layouts = {
     )
   },
   rowFormItem(h, currentItem, index, list) {
-    console.log('Draggable-Item [rowFormItem] Render Method')
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
     const className = this.activeId === config.formId
@@ -72,7 +70,6 @@ const layouts = {
     )
   },
   raw(h, currentItem, index, list) {
-    console.log('Draggable-Item [raw] Render Method')
     const config = currentItem.__config__
     const child = renderChildren.apply(this, arguments)
     return <render key={config.renderKey} conf={currentItem} onInput={ event => {
@@ -112,7 +109,6 @@ export default {
     'formConf'
   ],
   render(h) {
-    console.log('draggable-item [render] Method', this)
     // 根据config的layout拿到对应的函数
     const layout = layouts[this.currentItem.__config__.layout]
     // 如果存在，调用该函数
