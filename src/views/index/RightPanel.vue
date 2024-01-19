@@ -121,6 +121,7 @@
           <!-- 控制并设置el-checkbox-group的最少选中个数 -->
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="至少应选">
             <el-input-number
+              class="el-checkbox-group__min"
               :value="activeData.min"
               :min="0"
               placeholder="至少应选"
@@ -130,6 +131,7 @@
           <!-- 控制并设置el-checkbox-group的最大选中个数 -->
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="最多可选">
             <el-input-number
+              class="el-checkbox-group__max"
               :value="activeData.max"
               :min="0"
               placeholder="最多可选"
@@ -1207,5 +1209,9 @@ export default {
 }
 .node-icon{
   color: #bebfc3;
+}
+
+.el-checkbox-group__min, .el-checkbox-group__max {
+  width: 100%;
 }
 </style>
