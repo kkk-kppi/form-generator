@@ -179,11 +179,21 @@
           </el-form-item>
           <!-- 控制并设置组件的最小行数，当前仅包含：多行文本 -->
           <el-form-item v-if="activeData.autosize !== undefined" label="最小行数">
-            <el-input-number v-model="activeData.autosize.minRows" :min="1" placeholder="最小行数" />
+            <el-input-number
+              v-model="activeData.autosize.minRows"
+              class="el-input-textarea__row-min"
+              :min="1"
+              placeholder="最小行数"
+            />
           </el-form-item>
           <!-- 控制并设置组件的最大行数，当前仅包含：多行文本 -->
           <el-form-item v-if="activeData.autosize !== undefined" label="最大行数">
-            <el-input-number v-model="activeData.autosize.maxRows" :min="1" placeholder="最大行数" />
+            <el-input-number
+              v-model="activeData.autosize.maxRows"
+              class="el-input-textarea__row-max"
+              :min="1"
+              placeholder="最大行数"
+            />
           </el-form-item>
           <!-- 控制并设置组件的最小值，当前仅包含：el-input-number、el-slider -->
           <el-form-item v-if="isShowMin" label="最小值">
@@ -1212,6 +1222,9 @@ export default {
 }
 
 .el-checkbox-group__min, .el-checkbox-group__max {
+  width: 100%;
+}
+.el-input-textarea__row-min, .el-input-textarea__row-max{
   width: 100%;
 }
 </style>
