@@ -343,10 +343,9 @@ function buildSubmitUpload(scheme) {
 
 /**
  * 仅当el-upload组件的auto-upload属性为false时，才会调用该用法，用户在表单校验通过后，先调用上传图片的方法
- * @param {Object} scheme - 表单配置对象
- * @returns {String} - 生成的回调函数代码
+ * @param {Array} methodList - 已经生成的方法列表
  */
-function onUploadActionInFormSubmit(scheme, methodList) {
+function onUploadActionInFormSubmit(methodList) {
   // 暂时使用全覆盖写法
   methodList[0] = `
     submitForm() {
