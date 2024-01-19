@@ -11,6 +11,11 @@ function addCss(cssList, el) {
   }
 }
 
+/**
+ * 组装所有相关控件的样式，最后以\n为分隔符，返回
+ * @param {any} conf config.js中对应每个组件对象
+ * @returns {string} css样式字符串
+ */
 export function makeUpCss(conf) {
   const cssList = []
   conf.fields.forEach(el => addCss(cssList, el))
