@@ -278,12 +278,14 @@ const tags = {
     const name = el.name !== 'file' ? `name="${el.name}"` : ''
     const autoUpload = el['auto-upload'] === false ? ':auto-upload="false"' : ''
     const beforeUpload = `:before-upload="${el.__vModel__}BeforeUpload"`
+    const onSuccess = `:on-success="${el.__vModel__}OnSuccess"`
+    const onChange = `:on-change="${el.__vModel__}OnChange"`
     const fileList = `:file-list="${el.__vModel__}fileList"`
     const ref = `ref="${el.__vModel__}"`
     let child = buildElUploadChild(el)
 
     if (child) child = `\n${child}\n` // 换行
-    return `<${tag} ${ref} ${fileList} ${action} ${autoUpload} ${multiple} ${beforeUpload} ${listType} ${accept} ${name} ${disabled}>${child}</${tag}>`
+    return `<${tag} ${ref} ${fileList} ${action} ${autoUpload} ${multiple} ${beforeUpload} ${onSuccess} ${onChange} ${listType} ${accept} ${name} ${disabled}>${child}</${tag}>`
   },
   tinymce: el => {
     const { tag, vModel, placeholder } = attrBuilder(el)

@@ -77,30 +77,40 @@ function buildAttributes(scheme, dataList, ruleList, optionsList, methodList, pr
       const model = `${scheme.__vModel__}Options`
       const options = titleCase(model)
       const methodName = `get${options}`
+      // 生成获取options的请求方法
       buildOptionMethod(methodName, model, methodList, scheme)
+      // 将方法加入到created钩子函数中
       callInCreated(methodName, created)
     }
   }
 
-  // 处理props
+  // 4. 处理组织的props配置，当前仅需处理el-cascader的props
   if (scheme.props && scheme.props.props) {
     buildProps(scheme, propsList)
   }
 
-  // 处理el-upload的action
+  // 5. 处理el-upload组件的方法
   if (scheme.action && config.tag === 'el-upload') {
     uploadVarList.push(
       `${scheme.__vModel__}Action: '${scheme.action}',
       ${scheme.__vModel__}fileList: [],`
     )
+    // 5.1 生成before-upload对应的处理函数
     methodList.push(buildBeforeUpload(scheme))
-    // 非自动上传时，生成手动上传的函数
+    // 5.2 生成on-success对应的处理函数
+    methodList.push(buildOnSuccess(scheme))
+    // 5.3 生成on-change对应的处理函数
+    methodList.push(buildOnChange(scheme))
+    // 5.4 非自动上传时，生成手动上传的函数，并修改对应的表单提交函数，添加submitUpload逻辑
     if (!scheme['auto-upload']) {
+      // 生成before-upload对应的处理函数
       methodList.push(buildSubmitUpload(scheme))
+      // 修改对应的表单提交函数，添加submitUpload逻辑
+      onUploadActionInFormSubmit(methodList)
     }
   }
 
-  // 构建子级组件属性
+  // 5.5 递归构建子级组件的各个属性
   if (config.children) {
     config.children.forEach(item => {
       buildAttributes(item, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created)
@@ -115,45 +125,46 @@ function callInCreated(methodName, created) {
 
 // 混入处理函数
 function mixinMethod(type) {
-  const list = []; const
-    minxins = {
-      file: confGlobal.formBtns ? {
-        submitForm: `
-          submitForm() {
-            this.$refs['${confGlobal.formRef}'].validate(valid => {
-              if(!valid) return
-              // TODO 提交表单
-            })
-          },
-        `,
-        resetForm: `
-          resetForm() {
-            this.$refs['${confGlobal.formRef}'].resetFields()
-          },
-        `
-      } : null,
-      dialog: {
-        onOpen: 'onOpen() {},',
-        onClose: `
-          onClose() {
-            this.$refs['${confGlobal.formRef}'].resetFields()
-          },
-        `,
-        close: `
-          close() {
-            this.$emit('update:visible', false)
-          },
-        `,
-        handelConfirm: `
-          handelConfirm() {
-            this.$refs['${confGlobal.formRef}'].validate(valid => {
-              if(!valid) return
-            this.close()
-            })
-          },
-        `
-      }
+  const list = []
+  const minxins = {
+    file: confGlobal.formBtns ? {
+      submitForm: `
+        submitForm() {
+          this.$refs['${confGlobal.formRef}'].validate(valid => {
+            if(!valid) return
+            /* 提交表单 */
+            /* un-auto-upload */
+          })
+        },
+      `,
+      resetForm: `
+        resetForm() {
+          this.$refs['${confGlobal.formRef}'].resetFields()
+        },
+      `
+    } : null,
+    dialog: {
+      onOpen: 'onOpen() {},',
+      onClose: `
+        onClose() {
+          this.$refs['${confGlobal.formRef}'].resetFields()
+        },
+      `,
+      close: `
+        close() {
+          this.$emit('update:visible', false)
+        },
+      `,
+      handelConfirm: `
+        handelConfirm() {
+          this.$refs['${confGlobal.formRef}'].validate(valid => {
+            if(!valid) return
+          this.close()
+          })
+        },
+      `
     }
+  }
 
   const methods = minxins[type]
   if (methods) {
@@ -210,7 +221,11 @@ function buildRules(scheme, ruleList) {
   }
 }
 
-// 构建options
+/**
+ * 生成选项，el-cascader有options字段，其他从__slot__.options中获取
+ * @param {Object} scheme - 组件scheme对象
+ * @param {Array} optionsList - 选项列表
+ */
 function buildOptions(scheme, optionsList) {
   if (scheme.__vModel__ === undefined) return
   // el-cascader直接有options属性，其他组件都是定义在slot中，所以有两处判断
@@ -221,16 +236,28 @@ function buildOptions(scheme, optionsList) {
   optionsList.push(str)
 }
 
+/**
+ * 生成对应的props配置，一些组件可通过配置props属性自定义组件的字段，如el-cascader
+ * @param {Object} scheme - 组件scheme对象
+ * @param {Array} propsList - 属性列表
+ */
 function buildProps(scheme, propsList) {
   const str = `${scheme.__vModel__}Props: ${JSON.stringify(scheme.props.props)},`
   propsList.push(str)
 }
 
-// el-upload的BeforeUpload
+/**
+ * 为上传前处理生成代码，对应el-upload的before-upload属性
+ * @param {Object} scheme - 上传配置对象
+ * @returns {string} - 生成的代码字符串
+ */
 function buildBeforeUpload(scheme) {
   const config = scheme.__config__
-  const unitNum = units[config.sizeUnit]; let rightSizeCode = ''; let acceptCode = ''; const
-    returnList = []
+  const unitNum = units[config.sizeUnit]
+  let rightSizeCode = ''
+  let acceptCode = ''
+  const returnList = []
+
   // 判断文件大小
   if (config.fileSize) {
     rightSizeCode = `
@@ -242,6 +269,7 @@ function buildBeforeUpload(scheme) {
     `
     returnList.push('isRightSize')
   }
+
   // 判断文件类型
   if (scheme.accept) {
     acceptCode = `
@@ -253,6 +281,8 @@ function buildBeforeUpload(scheme) {
     `
     returnList.push('isAccept')
   }
+
+  // 生成函数体
   const str = `
     ${scheme.__vModel__}BeforeUpload(file) {
       ${rightSizeCode}
@@ -266,14 +296,68 @@ function buildBeforeUpload(scheme) {
   return returnList.length ? str : ''
 }
 
-// el-upload的submit
+/**
+ * 构建上传文件成功后的回调函数
+ * @param {Object} scheme - 上传文件的方案
+ * @returns {string} - 生成的回调函数代码
+ */
+function buildOnSuccess(scheme) {
+  return `
+    // 上传文件成功后的回调函数
+    ${scheme.__vModel__}OnSuccess(file, fileList) {
+      this.${scheme.__vModel__}fileList = fileList
+    },
+  `
+}
+
+/**
+ * 构建文件列表更变的回调函数，包括【添加文件】、【上传成功】、【上传失败】
+ * @param {Object} scheme - 上传文件的方案
+ * @returns {string} - 生成的回调函数代码
+ */
+function buildOnChange(scheme) {
+  return `
+  // 上传文件成功后的回调函数
+  ${scheme.__vModel__}OnChange(file, fileList) {
+    this.${scheme.__vModel__}fileList = fileList
+    // 同步更改到formData中
+    this.$set(this.formData, '${scheme.__vModel__}', fileList)
+  },
+  `
+}
+
+/**
+ * 为指定表单生成submitUpload方法的代码
+ * @param {Object} scheme - 表单配置对象
+ * @returns {String} - 生成的代码字符串
+ */
 function buildSubmitUpload(scheme) {
   const str = `
+    // 通过调用表单的submit方法提交表单数据
     submitUpload() {
       this.$refs['${scheme.__vModel__}'].submit()
     },
   `
   return str
+}
+
+/**
+ * 仅当el-upload组件的auto-upload属性为false时，才会调用该用法，用户在表单校验通过后，先调用上传图片的方法
+ * @param {Object} scheme - 表单配置对象
+ * @returns {String} - 生成的回调函数代码
+ */
+function onUploadActionInFormSubmit(scheme, methodList) {
+  // 暂时使用全覆盖写法
+  methodList[0] = `
+    submitForm() {
+      this.$refs['${confGlobal.formRef}'].validate(valid => {
+        if(!valid) return
+        /* 提交表单 */
+        /* un-auto-upload */
+        this.submitUpload()
+      })
+    },
+  `
 }
 
 /**
@@ -321,7 +405,15 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
         }
       },
       computed: {},
-      watch: {},
+      watch: {
+        // 暂时用来在预览中查看表单值的watch
+        formData: {
+          deep: true,
+          handler (val) {
+            sessionStorage.setItem('FG-formData', JSON.stringify(val))
+          }
+        }
+      },
       created () {
         ${created}
       },
