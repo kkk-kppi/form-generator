@@ -1144,9 +1144,17 @@ export default {
       this.activeData[this.currentIconModel] = val
     },
     tagChange(tagIcon) {
-      let target = inputComponents.find(item => item.__config__.tagIcon === tagIcon)
-      if (!target) target = selectComponents.find(item => item.__config__.tagIcon === tagIcon)
-      this.$emit('tag-change', target)
+      // 要求每个组件的tagIcon是唯一的
+      let allComponent = Array.isArray(this.tagList)
+        ? this.tagList.reduce((prev, current) => [...prev, ...current.options], []) : []
+      let target = allComponent.find(item => item.__config__.tagIcon === tagIcon)
+      if (target) {
+        this.$emit('tag-change', target)
+      } else {
+        this.$message.error('选择的目标组件类型不存在！')
+      }
+      allComponent = null
+      target = null
     },
     changeRenderKey() {
       if (needRerenderList.includes(this.activeData.__config__.tagIcon)) {

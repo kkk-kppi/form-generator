@@ -427,22 +427,34 @@ export default {
       this.operationType = 'copy'
     },
     tagChange(newTag) {
+      // TODO 这里cloneComponent会使得activeId自增，严格情况下是不需要的
       newTag = this.cloneComponent(newTag)
-      const config = newTag.__config__
+      // const config = newTag.__config__
+      // newTag.__vModel__ = this.activeData.__vModel__
+      // config.formId = this.activeId
+      // config.span = this.activeData.__config__.span
+      // this.activeData.__config__.tag = config.tag
+      // this.activeData.__config__.tagIcon = config.tagIcon
+      // this.activeData.__config__.document = config.document
+      // if (typeof this.activeData.__config__.defaultValue === typeof config.defaultValue) {
+      //   config.defaultValue = this.activeData.__config__.defaultValue
+      // }
+      // Object.keys(newTag).forEach(key => {
+      //   if (this.activeData[key] !== undefined) {
+      //     newTag[key] = this.activeData[key]
+      //   }
+      // })
+      // this.activeData = newTag
+      // this.updateDrawingList(newTag, this.drawingList)
+
       newTag.__vModel__ = this.activeData.__vModel__
-      config.formId = this.activeId
-      config.span = this.activeData.__config__.span
-      this.activeData.__config__.tag = config.tag
-      this.activeData.__config__.tagIcon = config.tagIcon
-      this.activeData.__config__.document = config.document
-      if (typeof this.activeData.__config__.defaultValue === typeof config.defaultValue) {
-        config.defaultValue = this.activeData.__config__.defaultValue
+      newTag.__config__.formId = this.activeId
+      newTag.__config__.span = this.activeData.__config__.span
+      newTag.__config__.labelWidth = this.activeData.__config__.labelWidth
+      if (typeof newTag.__config__.defaultValue === typeof this.activeData.__config__.defaultValue) {
+        newTag.__config__.defaultValue = this.activeData.__config__.defaultValue
       }
-      Object.keys(newTag).forEach(key => {
-        if (this.activeData[key] !== undefined) {
-          newTag[key] = this.activeData[key]
-        }
-      })
+
       this.activeData = newTag
       this.updateDrawingList(newTag, this.drawingList)
     },
