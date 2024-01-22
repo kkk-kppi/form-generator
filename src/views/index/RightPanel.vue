@@ -436,6 +436,7 @@
               :animation="340"
               group="selectItem"
               handle=".option-drag"
+              @sort="sortTableColumn"
             >
               <div v-for="(column, index) in activeData.__config__.children" :key="index" class="select-item">
                 <div class="select-line-icon option-drag">
@@ -819,7 +820,7 @@ const dateTimeFormat = {
 }
 
 // 使changeRenderKey在目标组件改变时可用
-const needRerenderList = ['rich-text', 'textarea']
+const needRerenderList = ['rich-text', 'textarea', 'table']
 
 export default {
   components: {
@@ -989,6 +990,11 @@ export default {
       this.activeData.__slot__.options.push({
         label: '',
         value: ''
+      })
+    },
+    sortTableColumn() {
+      this.$nextTick(() => {
+        this.changeRenderKey()
       })
     },
     addTableColumn() {
