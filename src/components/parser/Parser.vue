@@ -21,6 +21,7 @@ const layouts = {
   colFormItem(h, scheme) {
     const config = scheme.__config__
     const listeners = buildListeners.call(this, scheme)
+    const child = renderChildren.apply(this, arguments)
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
@@ -28,7 +29,9 @@ const layouts = {
       <el-col span={config.span}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
           label={config.showLabel ? config.label : ''}>
-          <render conf={scheme} on={listeners} />
+          <render conf={scheme} on={listeners}>
+            {child}
+          </render>
         </el-form-item>
       </el-col>
     )
@@ -46,6 +49,17 @@ const layouts = {
           {child}
         </el-row>
       </el-col>
+    )
+  },
+  raw(h, scheme) {
+    const child = renderChildren.apply(this, arguments)
+    if (scheme.__config__.tag === 'el-table-column') {
+      return <el-table-column prop={scheme.prop} label={scheme.label}>
+        {child}
+      </el-table-column>
+    }
+    return (
+        <span>not records</span>
     )
   }
 }
@@ -82,7 +96,6 @@ function formBtns(h) {
 }
 
 function renderFormItem(h, elementList) {
-  console.log(elementList)
   return elementList.map(scheme => {
     const config = scheme.__config__
     const layout = layouts[config.layout]
