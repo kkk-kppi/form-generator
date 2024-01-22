@@ -120,7 +120,9 @@ export default {
       })
     },
     parseByJson() {
-      const { href } = this.$router.resolve('/parser')
+      const { href } = this.$router.resolve({
+        name: 'parser'
+      })
       localStorage.setItem('FG-PARSER-JSON', this.jsonStr)
       window.open(href, '_blank')
     },
