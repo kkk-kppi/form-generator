@@ -1,5 +1,10 @@
 import { deepClone } from '@/utils/index'
 
+const units = {
+  KB: 1024,
+  MB: 1024 * 1024,
+  GB: 1024 * 1024 * 1024
+}
 const componentChild = {}
 /**
  * 将./slots中的文件挂载到对象componentChild上
@@ -19,6 +24,48 @@ function vModel(dataObject, defaultValue) {
 
   dataObject.on.input = val => {
     this.$emit('input', val)
+  }
+}
+
+function elUploadonEvent(dataObject, conf) {
+  dataObject.props.onRemove = (file, fileList) => {
+    let $$parent = this.$parent.$parent.$parent.$parent.$parent
+    this.$set($$parent.formData, this.conf.__vModel__, fileList)
+
+    $$parent = null
+  }
+  dataObject.props.onChange = (file, fileList) => {
+    console.log(file, fileList)
+    let $$parent = this.$parent.$parent.$parent.$parent.$parent
+    let $$children = this.$children[0]
+
+    // 只处理新增
+    if (!$$parent.formData[this.conf.__vModel__]
+        || $$parent.formData[this.conf.__vModel__] === this.conf.__config__.defaultValue
+        || fileList.length > $$parent.formData[this.conf.__vModel__].length
+    ) {
+      // 文件类型校验
+      const isAccept = new RegExp(this.conf.accept).test(file.name)
+      if (!isAccept) {
+        this.$message.error(`应该选择${this.conf.accept}类型的文件`)
+        $$children.handleRemove(file)
+        return
+      }
+
+      // 文件大小校验
+      console.log(units[this.conf.__config__.sizeUnit])
+      const isRightSize = file.size / units[this.conf.__config__.sizeUnit] < this.conf.__config__.fileSize
+      if (!isRightSize) {
+        this.$message.error(`文件大小超过 ${this.conf.__config__.fileSize}${this.conf.__config__.sizeUnit}`)
+        $$children.handleRemove(file)
+        return
+      }
+
+      this.$set($$parent.formData, this.conf.__vModel__, [...$$parent.formData[this.conf.__vModel__], file])
+    }
+
+    $$parent = null
+    $$children = null
   }
 }
 
@@ -56,6 +103,8 @@ export function buildDataObject(confClone, dataObject) {
     const val = confClone[key]
     if (key === '__vModel__') {
       vModel.call(this, dataObject, confClone.__config__.defaultValue)
+      // parser.vue中，针对el-upload，添加组件事件监听
+      if (confClone.__config__.tag === 'el-upload') elUploadonEvent.call(this, dataObject, confClone)
     } else if (dataObject[key] !== undefined) {
       if (dataObject[key] === null
         || dataObject[key] instanceof RegExp
