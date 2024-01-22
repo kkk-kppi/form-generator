@@ -734,7 +734,7 @@ export default {
   watch: {},
   created() {
     this.formConf = JSON.parse(localStorage.getItem('FG-PARSER-JSON'))
-    if (this.formConf) {
+    if (!this.formConf) {
       this.formConf = this.defaultConf
     }
   },
