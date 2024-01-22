@@ -14,6 +14,10 @@
           <i class="el-icon-download" />
           导出JSON文件
         </span>
+        <span class="bar-btn" @click="parseByJson">
+          <i class="el-icon-full-screen" />
+          查看JSON解析结果
+        </span>
         <span class="bar-btn delete-btn" @click="$emit('update:visible', false)">
           <i class="el-icon-circle-close" />
           关闭
@@ -114,6 +118,11 @@ export default {
         const blob = new Blob([codeStr], { type: 'text/plain;charset=utf-8' })
         saveAs(blob, value)
       })
+    },
+    parseByJson() {
+      const { href } = this.$router.resolve('/parser')
+      localStorage.setItem('FG-PARSER-JSON', this.jsonStr)
+      window.open(href, '_blank')
     },
     refresh() {
       try {
