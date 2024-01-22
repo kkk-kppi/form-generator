@@ -11,7 +11,10 @@ const ruleTrigger = {
   'el-cascader': 'change',
   'el-time-picker': 'change',
   'el-date-picker': 'change',
-  'el-rate': 'change'
+  'el-rate': 'change',
+  tinymce: 'blur',
+  'el-color-picker': 'change',
+  'el-upload': 'change'
 }
 
 const layouts = {
@@ -79,6 +82,7 @@ function formBtns(h) {
 }
 
 function renderFormItem(h, elementList) {
+  console.log(elementList)
   return elementList.map(scheme => {
     const config = scheme.__config__
     const layout = layouts[config.layout]
