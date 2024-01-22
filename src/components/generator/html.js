@@ -292,6 +292,15 @@ const tags = {
     const height = el.height ? `:height="${el.height}"` : ''
     const branding = el.branding ? `:branding="${el.branding}"` : ''
     return `<${tag} ${vModel} ${placeholder} ${height} ${branding}></${tag}>`
+  },
+  'el-table': el => {
+    const { tag } = attrBuilder(el)
+    const childElement = buildElTableChild(el)
+    return `
+      <${tag} :data="${el.__vModel__}Data" border>
+        ${childElement}
+      </${tag}>
+    `
   }
 }
 
@@ -375,6 +384,18 @@ function buildElUploadChild(scheme) {
   return list.join('\n')
 }
 
+// el-table 子级
+function buildElTableChild(scheme) {
+  const children = []
+  const schemeChildren = scheme.__config__.children
+  if (schemeChildren && schemeChildren.length) {
+    const tag = 'el-table-column'
+    children.push(`
+      <${tag} v-for="(item, index) in ${scheme.__vModel__}Columns" :key="index" :label="item.label" :prop="item.prop"></${tag}>
+    `)
+  }
+  return children
+}
 /**
  * 组装html代码。【入口函数】
  * @param {Object} formConfig 整个表单配置

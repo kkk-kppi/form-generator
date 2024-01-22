@@ -27,9 +27,10 @@ export function makeUpJs(formConfig, type) {
   const methodList = mixinMethod(type)
   const uploadVarList = []
   const created = []
+  const elTableVarList = []
 
   formConfig.fields.forEach(el => {
-    buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created)
+    buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created, elTableVarList)
   })
 
   const script = buildexport(
@@ -41,7 +42,8 @@ export function makeUpJs(formConfig, type) {
     uploadVarList.join('\n'),
     propsList.join('\n'),
     methodList.join('\n'),
-    created.join('\n')
+    created.join('\n'),
+    elTableVarList.join('\n')
   )
   confGlobal = null
   return script
@@ -58,7 +60,10 @@ export function makeUpJs(formConfig, type) {
  * @param {Array} uploadVarList - upload变量列表
  * @param {Function} created - 收集在created中执行的函数的列表
  */
-function buildAttributes(scheme, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created) {
+function buildAttributes(
+  scheme, dataList, ruleList, optionsList, methodList, propsList, uploadVarList,
+  created, elTableVarList
+) {
   const config = scheme.__config__
   const slot = scheme.__slot__
   // 1. 生成SFC中的数据，即data() { return {} }
@@ -110,10 +115,26 @@ function buildAttributes(scheme, dataList, ruleList, optionsList, methodList, pr
     }
   }
 
-  // 5.5 递归构建子级组件的各个属性
+  // 6. 处理el-table组件的变量
+  if (config.tag === 'el-table') {
+    const data = JSON.stringify(deepClone(scheme.data))
+    const columns = JSON.stringify(scheme.__config__.children.map(v => ({
+      prop: v.prop,
+      label: v.label
+    })))
+    elTableVarList.push(`
+      ${scheme.__vModel__}Data: ${data},
+      ${scheme.__vModel__}Columns: ${columns},
+    `)
+  }
+
+  // Last 递归构建子级组件的各个属性
   if (config.children) {
     config.children.forEach(item => {
-      buildAttributes(item, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created)
+      buildAttributes(
+        item, dataList, ruleList, optionsList, methodList, propsList, uploadVarList,
+        created, elTableVarList
+      )
     })
   }
 }
@@ -384,7 +405,7 @@ function buildOptionMethod(methodName, model, methodList, scheme) {
 }
 
 // js整体拼接
-function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, methods, created) {
+function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, methods, created, elTableVar) {
   const str = `
     ${exportDefault} {
       ${inheritAttrs[type]}
@@ -401,6 +422,7 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
           ${uploadVar}
           ${selectOptions}
           ${props}
+          ${elTableVar}
         }
       },
       computed: {},
