@@ -24,6 +24,7 @@ const layouts = {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
     const child = renderChildren.apply(this, arguments)
+    const operation = renderOperation.apply(this, arguments)
     let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
@@ -33,6 +34,7 @@ const layouts = {
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
+          {operation}
           <render key={config.renderKey} conf={currentItem} onInput={ event => {
             this.$set(config, 'defaultValue', event)
           }}>
@@ -78,6 +80,21 @@ const layouts = {
       {child}
     </render>
   }
+}
+
+function renderOperation(h, currentItem) {
+  console.log(currentItem.__config__.tag, currentItem)
+  const operationList = currentItem.__operations__
+  if (!operationList) return null
+  return operationList.map((operation, index) => {
+    const operationConfig = operation.__config__
+    const layout = layouts[operationConfig.layout]
+    if (layout) {
+      return layout.call(this, h, operation, index, operationConfig.children)
+    }
+
+    return layoutIsNotFound.call(this)
+  })
 }
 
 function renderChildren(h, currentItem, index, list) {

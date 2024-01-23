@@ -634,25 +634,33 @@ export const layoutComponents = [
         label: '名称'
       }]
     },
-    // __slot__: {
-    //   columns: [
-    //     {
-    //       ...cloneInput,
-    //       prop: 'default1',
-    //       label: '默认1'
-    //     },
-    //     {
-    //       ...cloneInput,
-    //       prop: 'default2',
-    //       label: '默认2'
-    //     },
-    //     {
-    //       ...cloneInput,
-    //       prop: 'default3',
-    //       label: '默认3'
-    //     }
-    //   ]
-    // },
+    __operations__: [
+      {
+        __config__: {
+          label: '按钮',
+          showLabel: true,
+          changeTag: true,
+          labelWidth: null,
+          tag: 'el-button',
+          tagIcon: 'button',
+          span: 24,
+          layout: 'raw',
+          document: 'https://element.eleme.cn/#/zh-CN/component/button'
+        },
+        __slot__: {
+          default: '新增一行'
+        },
+        style: {
+          'margin-bottom': '5px'
+        },
+        type: 'primary',
+        round: false,
+        size: 'medium',
+        plain: false,
+        circle: false,
+        disabled: false
+      }
+    ],
     data: [],
     directives: [{
       name: 'loading',

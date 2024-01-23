@@ -22,6 +22,7 @@ const layouts = {
     const config = scheme.__config__
     const listeners = buildListeners.call(this, scheme)
     const child = renderChildren.apply(this, arguments)
+    const operation = renderOperation.apply(this, arguments)
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
@@ -29,6 +30,7 @@ const layouts = {
       <el-col span={config.span}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
           label={config.showLabel ? config.label : ''}>
+          {operation}
           <render conf={scheme} on={listeners}>
             {child}
           </render>
@@ -58,9 +60,12 @@ const layouts = {
         {child}
       </el-table-column>
     }
-    return (
-        <span>not records</span>
-    )
+    return h(scheme.__config__.tag, {
+      props: scheme
+    }, [
+      scheme.__slot__ ? scheme.__slot__.default : null,
+      child
+    ])
   }
 }
 
@@ -102,6 +107,19 @@ function renderFormItem(h, elementList) {
 
     if (layout) {
       return layout.call(this, h, scheme)
+    }
+    throw new Error(`没有与${config.layout}匹配的layout`)
+  })
+}
+
+function renderOperation(h, scheme) {
+  const operations = scheme.__operations__
+  if (!operations) return null
+  return operations.map(operationScheme => {
+    const config = operationScheme.__config__
+    const layout = layouts[config.layout]
+    if (layout) {
+      return layout.call(this, h, operationScheme)
     }
     throw new Error(`没有与${config.layout}匹配的layout`)
   })
