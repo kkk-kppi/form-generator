@@ -6,7 +6,7 @@ import pluginsConfig from './pluginsConfig'
 let monacoEidtor
 
 /**
- * 动态加载monaco-editor cdn资源
+ * 动态加载monaco-editor资源，当前加载是为publick下的monaco-editor资源
  * @param {Function} cb 回调，必填
  */
 export default function loadMonaco(cb) {
