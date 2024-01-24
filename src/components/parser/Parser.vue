@@ -55,17 +55,12 @@ const layouts = {
   },
   raw(h, scheme) {
     const child = renderChildren.apply(this, arguments)
-    if (scheme.__config__.tag === 'el-table-column') {
-      return <el-table-column prop={scheme.prop} label={scheme.label}>
+    const listeners = buildListeners.call(this, scheme)
+    return (
+      <render conf={scheme} on={listeners}>
         {child}
-      </el-table-column>
-    }
-    return h(scheme.__config__.tag, {
-      props: scheme
-    }, [
-      scheme.__slot__ ? scheme.__slot__.default : null,
-      child
-    ])
+      </render>
+    )
   }
 }
 
@@ -145,6 +140,7 @@ function buildListeners(scheme) {
   Object.keys(methods).forEach(key => {
     listeners[key] = event => methods[key].call(this, event)
   })
+  console.log('listeners =>', listeners)
   // 响应 render.js 中的 vModel $emit('input', val)
   listeners.input = event => setValue.call(this, event, config, scheme)
 
