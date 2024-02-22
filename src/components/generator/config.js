@@ -614,7 +614,7 @@ export const layoutComponents = [
       showLabel: true,
       changeTag: true,
       labelWidth: null,
-      label: '表格[开发中]',
+      label: '展示型表格[开发中]',
       dataType: 'dynamic',
       method: 'get',
       dataPath: 'list',
@@ -658,17 +658,226 @@ export const layoutComponents = [
         size: 'medium',
         plain: false,
         circle: false,
-        disabled: false
+        disabled: false,
+        on: {
+          click: 'table_opertaion_addRowItem'
+        }
       }
     ],
     data: [],
-    directives: [{
-      name: 'loading',
-      value: true
-    }],
+    // directives: [{
+    //   name: 'loading',
+    //   value: true
+    // }],
     border: true,
     type: 'default',
     justify: 'start',
     align: 'top'
+  },
+  {
+    __config__: {
+      layout: 'colFormItem',
+      tagIcon: 'table',
+      tag: 'el-table',
+      document: 'https://element.eleme.cn/#/zh-CN/component/table',
+      span: 24,
+      formId: 217,
+      renderKey: '2171706081785541',
+      componentName: 'row101',
+      showLabel: true,
+      changeTag: true,
+      labelWidth: null,
+      label: '输入型表格[开发中]',
+      dataType: 'dynamic',
+      method: 'get',
+      dataPath: 'list',
+      dataConsumer: 'data',
+      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
+      children: [
+        {
+          __config__: {
+            layout: 'raw',
+            tag: 'el-table-column',
+            renderKey: '2181706081785541',
+            children: [
+              {
+                __config__: {
+                  label: '',
+                  labelWidth: null,
+                  showLabel: true,
+                  changeTag: true,
+                  tag: 'el-input',
+                  tagIcon: 'input',
+                  required: true,
+                  layout: 'colFormItem',
+                  span: 24,
+                  document: 'https://element.eleme.cn/#/zh-CN/component/input',
+                  regList: [],
+                  formId: 219,
+                  renderKey: '2191706081785541'
+                },
+                __slot__: {
+                  prepend: '',
+                  append: ''
+                },
+                placeholder: '请输入',
+                style: {
+                  width: '100%'
+                },
+                clearable: true,
+                'prefix-icon': '',
+                'suffix-icon': '',
+                maxlength: null,
+                'show-word-limit': false,
+                readonly: false,
+                disabled: false,
+                __vModel__: 'field219'
+              }
+            ],
+            formId: 218
+          },
+          __parent__: 'el-table',
+          prop: 'date',
+          label: '日期'
+        },
+        {
+          __config__: {
+            layout: 'raw',
+            tag: 'el-table-column',
+            renderKey: '2201706081785541',
+            children: [
+              {
+                __config__: {
+                  label: '',
+                  labelWidth: null,
+                  showLabel: true,
+                  changeTag: true,
+                  tag: 'el-input',
+                  tagIcon: 'input',
+                  required: true,
+                  layout: 'colFormItem',
+                  span: 24,
+                  document: 'https://element.eleme.cn/#/zh-CN/component/input',
+                  regList: [],
+                  formId: 221,
+                  renderKey: '2211706081785541'
+                },
+                __slot__: {
+                  prepend: '',
+                  append: ''
+                },
+                placeholder: '请输入',
+                style: {
+                  width: '100%'
+                },
+                clearable: true,
+                'prefix-icon': '',
+                'suffix-icon': '',
+                maxlength: null,
+                'show-word-limit': false,
+                readonly: false,
+                disabled: false,
+                __vModel__: 'field221'
+              }
+            ],
+            formId: 220
+          },
+          __parent__: 'el-table',
+          prop: 'address',
+          label: '地址'
+        },
+        {
+          __config__: {
+            layout: 'raw',
+            tag: 'el-table-column',
+            renderKey: '2221706081785541',
+            children: [
+              {
+                __config__: {
+                  label: '',
+                  labelWidth: null,
+                  showLabel: true,
+                  changeTag: true,
+                  tag: 'el-input',
+                  tagIcon: 'input',
+                  required: true,
+                  layout: 'colFormItem',
+                  span: 24,
+                  document: 'https://element.eleme.cn/#/zh-CN/component/input',
+                  regList: [],
+                  formId: 223,
+                  renderKey: '2231706081785541'
+                },
+                __slot__: {
+                  prepend: '',
+                  append: ''
+                },
+                placeholder: '请输入',
+                style: {
+                  width: '100%'
+                },
+                clearable: true,
+                'prefix-icon': '',
+                'suffix-icon': '',
+                maxlength: null,
+                'show-word-limit': false,
+                readonly: false,
+                disabled: false,
+                __vModel__: 'field223'
+              }
+            ],
+            formId: 222
+          },
+          __parent__: 'el-table',
+          prop: 'name',
+          label: '名称'
+        }
+      ]
+    },
+    __operations__: [
+      {
+        __config__: {
+          label: '按钮',
+          showLabel: true,
+          changeTag: true,
+          labelWidth: null,
+          tag: 'el-button',
+          tagIcon: 'button',
+          span: 24,
+          layout: 'raw',
+          document: 'https://element.eleme.cn/#/zh-CN/component/button'
+        },
+        __slot__: {
+          default: '新增一行'
+        },
+        style: {
+          'margin-bottom': '5px'
+        },
+        type: 'primary',
+        round: false,
+        size: 'medium',
+        plain: false,
+        circle: false,
+        disabled: false
+      }
+    ],
+    data: [
+      {
+        date: '2020-09-09',
+        name: 'JakHuang',
+        address: '上海市普陀区金沙江路 2020 弄'
+      }
+    ],
+    // directives: [
+    //   {
+    //     name: 'loading',
+    //     value: false
+    //   }
+    // ],
+    border: true,
+    type: 'default',
+    justify: 'start',
+    align: 'top',
+    __vModel__: 'field217'
   }
 ]
