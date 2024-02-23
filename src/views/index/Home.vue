@@ -94,6 +94,7 @@
       :active-data="activeData"
       :form-conf="formConf"
       :show-field="!!drawingList.length"
+      :create-id-and-key="createIdAndKey"
       @tag-change="tagChange"
       @fetch-data="fetchData"
     />
